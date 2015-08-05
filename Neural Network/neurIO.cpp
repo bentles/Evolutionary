@@ -1,23 +1,6 @@
 #include "neurIO.h"
 
 namespace nnet {
-    
-    vector<string> getData(const ifstream &stream) {
-        string line;
-        vector<string> strings;
-        if (stream.is_open())
-        {
-            while ( getline (stream,line) )
-            {
-                strings.push_back(line);
-            }
-            stream.close();
-        }
-        else cout << "Unable to open file";
-
-        return strings;
-    }
-
     vector<string> &split(const string &s, char delim, vector<string> &elems) {
         std::stringstream ss(s);
         string item;
@@ -32,12 +15,32 @@ namespace nnet {
         split(s, delim, elems);
         return elems;
     }
+
+    vector<string> getData(const string &filename) {
+        string line;
+        ifstream stream = ifstream(filename);
+        vector<string> strings;
+        if (stream.is_open())
+        {
+            while ( std::getline(stream, line))
+            {
+                strings.push_back(line);
+            }
+            stream.close();
+        }
+        else std::cout << "Unable to open file";
+
+        return strings;
+    }
     
-    vector<vector<float> > getDataCsv(const ifstream &stream) {
-        vector<string> strings = getData(&stream);
+    vector<vector<float> > getDataCsv(const string &filename) {
+        vector<string> strings = getData(filename);
 
         if (strings.size() == 0)
-            return vector<vector<float> > dataset;
+        {
+            vector<vector<float> > dataset;
+            return dataset;
+        }
         else {
             vector<string> elements = split(strings[0], ',');
             int size = elements.size();
@@ -47,11 +50,21 @@ namespace nnet {
             for(int i = 0; i < strings.size(); i++) {
                 vector<string> elems = split(strings[i], ',');
                 for (int j = 0; j < size; j++) {
+                    //std::cout << elems[j];
                     dataset[i].push_back(stof(elems[j]));                    
                 }
             }
 
             return dataset;                
+        }
+    }
+
+    void printData(const vector<vector<float> > &data)
+    {
+        for (int i = 0; i < data.size(); i++)
+        {
+            for (int j = 0; j < data[0].size(); j++)
+                std::cout << (data[i])[j] << std::endl;
         }
     }
 }

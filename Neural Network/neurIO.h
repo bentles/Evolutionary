@@ -1,5 +1,6 @@
 #ifndef NEURIO_H
 #define NEURIO_H
+
 #include <iostream>
 #include <fstream>
 #include <vector>
@@ -10,9 +11,14 @@ using std::string;
 using std::vector;
 using std::ifstream;
 using std::stof;
+
 namespace nnet
 {
-    vector<string> getData(ifstream const &stream);
-    void getDataCsv(vector<vector<float> > const &data);
+    vector<string> getData(const string &filename);
+    vector<vector<float> > getDataCsv(const string &filename);
+    void printData(const vector<vector<float> > &data);
+    vector<string> &split(const string &s, char delim, vector<string> &elems);
+    vector<string> split(const string &s, char delim);    
+    vector<vector<float> > getDataCsv(const ifstream &stream);
 }
-#endif
+#endif /* NEURIO_H */
