@@ -50,8 +50,8 @@ namespace nnet {
             for(int i = 0; i < strings.size(); i++) {
                 vector<string> elems = split(strings[i], ',');
                 for (int j = 0; j < size; j++) {
-                    //std::cout << elems[j];
-                    dataset[i].push_back(stof(elems[j]));                    
+                    //std::cout << elems[j] << std::endl;
+                    dataset[j].push_back(stof(elems[j]));                    
                 }
             }
 
@@ -61,10 +61,11 @@ namespace nnet {
 
     void printData(const vector<vector<float> > &data)
     {
-        for (int i = 0; i < data.size(); i++)
+        for (int i = 0; i < data[0].size(); i++)
         {
-            for (int j = 0; j < data[0].size(); j++)
-                std::cout << (data[i])[j] << std::endl;
+            for (int j = 0; j < data.size(); j++)
+                std::cout << (data[j])[i] << ',';
+            std::cout << std::endl;
         }
     }
 }
