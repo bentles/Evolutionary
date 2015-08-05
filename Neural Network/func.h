@@ -1,3 +1,6 @@
+#ifndef FUNC_H
+#define FUNC_H
+
 namespace nnet {
 
     class IFunc {
@@ -5,3 +8,5 @@ namespace nnet {
         virtual float apply(float net) = 0;
     };
 }
+
+#endif /* FUNC_H */

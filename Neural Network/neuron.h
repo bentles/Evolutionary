@@ -19,6 +19,8 @@ namespace nnet
         Neuron(int s, IFunc* function);        
         void Print();
         void SetWeight(int index, float value);
+        void AddWeight(int index, float value);
+        void SetInput(int index, float value);
         float GetOutput();
     };
 }
