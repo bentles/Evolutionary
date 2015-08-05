@@ -1,1 +1,9 @@
+# Compiled Object files
+*.o
+
+# Executables
+*.out
+
+#Emacs things
 *~
+*#
