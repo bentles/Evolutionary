@@ -33,19 +33,19 @@ namespace nnet {
         return strings;
     }
     
-    vector<vector<float> > getDataCsv(const string &filename) {
+    vector<vector<double> > getDataCsv(const string &filename) {
         vector<string> strings = getData(filename);
 
         if (strings.size() == 0)
         {
-            vector<vector<float> > dataset;
+            vector<vector<double> > dataset;
             return dataset;
         }
         else {
             vector<string> elements = split(strings[0], ',');
             int size = elements.size();
             
-            vector<vector<float> > dataset(size);
+            vector<vector<double> > dataset(size);
 
             for(int i = 0; i < strings.size(); i++) {
                 vector<string> elems = split(strings[i], ',');
@@ -59,7 +59,7 @@ namespace nnet {
         }
     }
 
-    void printData(const vector<vector<float> > &data)
+    void printData(const vector<vector<double> > &data)
     {
         for (int i = 0; i < data[0].size(); i++)
         {

@@ -7,22 +7,22 @@ namespace nnet
 {
     class Sigmoid : public IFunc {
     public:
-        virtual float apply(float net);  
+        virtual double apply(double net);  
     };
 
     class Ramp : public IFunc {
     public:
-        virtual float apply(float net);  
+        virtual double apply(double net);  
     };
     
     class Linear : public IFunc {        
     public:
-        virtual float apply(float net);
+        virtual double apply(double net);
     };
     
     class Step : public IFunc {        
     public:
-        virtual float apply(float net);
+        virtual double apply(double net);
     };
 }
 

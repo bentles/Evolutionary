@@ -1,9 +1,10 @@
 #ifndef NEURON_H
 #define NERUON_H
 #include <vector>
+#include <stdlib.h>
 #include "func.h"
 
-typedef std::vector<float> row_t;
+typedef std::vector<double> row_t;
 
 namespace nnet
 {
@@ -14,14 +15,16 @@ namespace nnet
         int m_size;
         IFunc& m_function;
 
-        float GetNet();
+        double getNet();
     public:
+        double getInput(int index);
         Neuron(int s, IFunc* function);        
         void Print();
-        void SetWeight(int index, float value);
-        void AddWeight(int index, float value);
-        void SetInput(int index, float value);
-        float GetOutput();
+        void setWeight(int index, double value);
+        void addWeight(int index, double value);
+        void setInput(int index, double value);
+        double getOutput();
+        void randomizeWeights();
     };
 }
 #endif /* NERUON_H */

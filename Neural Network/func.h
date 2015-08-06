@@ -5,7 +5,7 @@ namespace nnet {
 
     class IFunc {
     public:
-        virtual float apply(float net) = 0;
+        virtual double apply(double net) = 0;
     };
 }
 
