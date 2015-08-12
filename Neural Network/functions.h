@@ -1,28 +1,33 @@
 #include "func.h"
+#include <climits>
 
 #ifndef FUNCTIONS_H
 #define FUNCTIONS_H
 
 namespace nnet
 {
-    class Sigmoid : public IFunc {
+    class Sigmoid : public Func {
     public:
-        virtual double apply(double net);  
+        Sigmoid() : Func(INT_MAX){}
+        virtual double apply(double net, int deriv = 0);  
     };
 
-    class Ramp : public IFunc {
+    class Ramp : public Func {
     public:
-        virtual double apply(double net);  
+        Ramp() : Func(0){}
+        virtual double apply(double net, int deriv = 0);  
     };
     
-    class Linear : public IFunc {        
+    class Linear : public Func {        
     public:
-        virtual double apply(double net);
+        Linear() : Func(INT_MAX){}
+        virtual double apply(double net, int deriv = 0);
     };
     
-    class Step : public IFunc {        
+    class Step : public Func {        
     public:
-        virtual double apply(double net);
+        Step() : Func(0){}
+        virtual double apply(double net, int deriv = 0);
     };
 }
 

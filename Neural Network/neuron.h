@@ -2,6 +2,7 @@
 #define NERUON_H
 #include <vector>
 #include <stdlib.h>
+#include "helpers.h"
 #include "func.h"
 
 typedef std::vector<double> row_t;
@@ -10,15 +11,15 @@ namespace nnet
 {
     class Neuron {
     private:
-        row_t m_weights;
+        std::vector<KahanAccumulation> m_weights;
         row_t m_inputs;
         int m_size;
-        IFunc& m_function;
+        Func& m_function;
 
         double getNet();
     public:
         double getInput(int index);
-        Neuron(int s, IFunc* function);        
+        Neuron(int s, Func* function);        
         void Print();
         void setWeight(int index, double value);
         void addWeight(int index, double value);

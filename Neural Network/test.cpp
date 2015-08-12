@@ -2,12 +2,15 @@
 #include "neuron.h"
 #include "functions.h"
 #include "neurIO.h"
+#include "helpers.h"
 #include <math.h>
 
 int main(int argc, char *argv[])
 {
+    //this is all very messy until i need to generalise things for assignment 2
+    
     using namespace nnet;
-    string a = "../Assignment 1/SalData.csv";
+    string a = "../Assignment 1/SalTraining.csv";
     vector< vector<double> > data = getDataCsv(a);
     int neuron_size = data.size() - 1;
     
@@ -17,28 +20,40 @@ int main(int argc, char *argv[])
     std::cout << "randomising weights..." << std::endl;
     priceNeuron.randomizeWeights();
 
-    double zeta = 0.00000000000000001;
+    double zeta = 0.00000001;
 
     int data_size = data[0].size();
-    vector<double> updates(neuron_size);
 
-    for(int l = 0; l < 100000; l++)
+    for(int l = 0; l < 400000; l++)
     {
-        std::cout << l << std::endl;
+        //re-init the vector of updates
+        vector<KahanAccumulation> updates(neuron_size + 1);
+        
+
+        //go through every pattern
         for(int i = 0; i < data_size; i++) {
+            
+            //set all inputs for pattern 
             for (int j = 1; j <= neuron_size; j++) {
                 priceNeuron.setInput(j, data[j][i]);
             }
 
-            for (int j = 1; j <= neuron_size; j++) {
-                updates[j-1] += zeta*2*(data[0][i] -
-                                        priceNeuron.getOutput())*priceNeuron.getInput(j);
+            //sum up updates
+            for (int j = 0; j <= neuron_size; j++) {
+                updates[j] = KahanSum(updates[j], zeta*2*(data[0][i] -
+                                                priceNeuron.getOutput())*priceNeuron.getInput(j));
             }
         }
 
-        std::cout << updates[0] << std::endl;
-        for (int j = 1; j <= neuron_size; j++) {
-            priceNeuron.addWeight(j, updates[j-1]);
+        std::cout << "Iteration: " << l << std::endl;
+        for (int i = 0; i < 8; i++) {
+            std::cout << updates[i].sum << ((i==7)?"":",");
+        }
+        std::cout << std::endl;
+        
+        //apply updates
+        for (int j = 0; j <= neuron_size; j++) {
+            priceNeuron.addWeight(j, updates[j].sum);
         }
     }
     priceNeuron.Print();

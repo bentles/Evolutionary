@@ -2,10 +2,12 @@
 #define FUNC_H
 
 namespace nnet {
-
-    class IFunc {
+    class Func {
+        int const m_diff;
     public:
-        virtual double apply(double net) = 0;
+        virtual double apply(double net, int diff = 0) = 0;
+    protected:
+        Func(int diff = 0) : m_diff(diff){}
     };
 }
 
