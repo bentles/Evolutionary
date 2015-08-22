@@ -1,8 +1,11 @@
-#include <vector>
-#include "neuron.h"
-
 #ifndef NEURAL_NETWORKS_H
 #define NEURAL_NETWORKS_H
+
+#include <vector>
+#include "neuron.h"
+#include "neurIO.h"
+
+using std::vector;
 
 namespace nnet
 {
@@ -23,9 +26,10 @@ namespace nnet
         StandardFFNN(vector<Neuron> input_layer,
                      vector<Neuron> hidden_layer,
                      vector<Neuron> output_layer,
-                     DataSet training, DataSet verification, DataSet test);
+                     const DataSet &training, const DataSet &verification, const DataSet &test);
 
-        vector<double> getOutputs();
+        vector<double> getOutputs(const vector<double> &pattern);
+    };
 }
 
 #endif /* NEURAL_NETWORKS_H */

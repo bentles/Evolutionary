@@ -26,7 +26,7 @@ namespace nnet {
     }
 
     //we will not modify the pattern given
-    void Neuron::setInputs(const vector<double>& pattern) {
+    void Neuron::setInputs(const vector<double> &pattern) {
         for(int i = 0; i < pattern.size(); i++) {
             setInput(i, pattern[i]);
         }
@@ -63,7 +63,7 @@ namespace nnet {
         for(int i = 0; i < m_size; i++) {
             std::cout << m_weights[i].sum << ", ";
         }
-        std::cout << m_weights[m_size] << std::endl;
+        std::cout << m_weights[m_size].sum << std::endl;
     }
 
     double Neuron::getNet() {

@@ -5,6 +5,8 @@
 #include "helpers.h"
 #include "func.h"
 
+using std::vector;
+
 typedef std::vector<double> row_t;
 
 namespace nnet
@@ -26,6 +28,7 @@ namespace nnet
         void setWeight(int index, double value);
         void addWeight(int index, double value);
         void setInput(int index, double value);
+        void setInputs(const vector<double> &pattern);
         void initBiasInput(double value);
         double getOutput();
         void randomizeWeights();

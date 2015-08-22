@@ -6,6 +6,7 @@
 #include <vector>
 #include <string>
 #include <sstream>
+#include <cassert>
 
 using std::string;
 using std::vector;
@@ -21,11 +22,11 @@ namespace nnet
         vector<vector<double> > m_patterns;
     public:
         DataSet(const string &filename, int output_column = -1);
-        const vector<double> &DataSet::getPattern(int i);
+        const vector<double> &getPattern(int i);
         int size();
         double getOutput(int i);
         
-    }
+    };
     
     vector<string> getStrings(const string &filename);
     vector<vector<double> > getDataCsv(const string &filename);
