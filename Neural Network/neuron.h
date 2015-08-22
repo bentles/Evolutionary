@@ -20,10 +20,11 @@ namespace nnet
     public:
         double getInput(int index);
         Neuron(int s, Func* function);        
-        void Print();
+        void printWeights();
         void setWeight(int index, double value);
         void addWeight(int index, double value);
         void setInput(int index, double value);
+        void initBiasInput(double value);
         double getOutput();
         void randomizeWeights();
     };
