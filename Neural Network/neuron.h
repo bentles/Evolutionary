@@ -13,6 +13,8 @@ namespace nnet
     private:
         std::vector<KahanAccumulation> m_weights;
         row_t m_inputs;
+        double m_output;
+        bool m_valid;
         int m_size;
         Func& m_function;
 

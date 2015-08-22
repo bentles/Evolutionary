@@ -13,11 +13,16 @@ namespace nnet {
         //bias
         m_weights.push_back({0});
         m_inputs.push_back(-1);
+
+        //m_output is not a valid output
+        m_valid = false;
     }
 
     void Neuron::setInput(int index, double value) {
         assert(index >= 0 && index < m_size);
         m_inputs[index] = value;
+
+        m_valid = false;
     }
 
     //we will not modify the pattern given
@@ -25,6 +30,8 @@ namespace nnet {
         for(int i = 0; i < pattern.size(); i++) {
             setInput(i, pattern[i]);
         }
+
+        m_valid = false;
     }
 
     double Neuron::getInput(int index) {
@@ -33,16 +40,22 @@ namespace nnet {
 
     void Neuron::initBiasInput(double value){ //default is -1 to match text
         m_inputs[m_size] = value;
+
+        m_valid = false;
     }
 
     void Neuron::setWeight(int index, double value) {
         assert(index >= 0 && index <= m_size); //can set bias weight
         m_weights[index].sum = value;
+
+        m_valid = false;
     }
 
     void Neuron::addWeight(int index, double value) {
         assert(index >= 0 && index < m_size);
         m_weights[index] = KahanSum(m_weights[index], value);
+
+        m_valid = false;
     }
 
     void Neuron::printWeights() {
@@ -62,7 +75,14 @@ namespace nnet {
     }
 
     double Neuron::getOutput() {
-        return m_function.apply(getNet());
+        //memoise result
+        if (m_valid)
+            return m_output;
+        else {
+            //we now have a valid value for output cached
+            m_valid = true;
+            return m_function.apply(getNet());
+        }
     }
 
     void Neuron::randomizeWeights() {
