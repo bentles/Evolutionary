@@ -26,9 +26,12 @@ namespace nnet
         StandardFFNN(vector<Neuron> input_layer,
                      vector<Neuron> hidden_layer,
                      vector<Neuron> output_layer,
-                     const DataSet &training, const DataSet &verification, const DataSet &test);
+                     const DataSet &training,
+                     const DataSet &verification,
+                     const DataSet &test);
 
         vector<double> getOutputs(const vector<double> &pattern);
+        void updateWeightsStochastic(int pattern, double learn_rate, double momentum);
     };
 }
 

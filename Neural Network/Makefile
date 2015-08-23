@@ -1,4 +1,5 @@
 CFLAGS = -g -std=c++11
+CHK_SOURCES = neuron.cpp functions.cpp neurIO.cpp helpers.cpp neuralnetworks.cpp
 
 all: neuron.cpp
 	g++ $(CFLAGS) -c neuron.cpp functions.cpp neurIO.cpp helpers.cpp neuralnetworks.cpp

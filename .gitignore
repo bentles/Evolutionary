@@ -1,3 +1,8 @@
 *~
 *.o
 *.a
+*.desktop
+*.desktop.*
+*.csv
+*#
+/*

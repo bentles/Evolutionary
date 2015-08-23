@@ -38,6 +38,10 @@ namespace nnet {
         return m_inputs[index];
     }
 
+    double Neuron::getWeight(int i) {
+        return m_weights[i].sum;
+    }
+
     void Neuron::initBiasInput(double value){ //default is -1 to match text
         m_inputs[m_size] = value;
 
@@ -51,10 +55,11 @@ namespace nnet {
         m_valid = false;
     }
 
-    void Neuron::addWeight(int index, double value) {
+    void Neuron::addWeight(int index, double value, double momentum) {
         assert(index >= 0 && index < m_size);
-        m_weights[index] = KahanSum(m_weights[index], value);
-
+        m_prev_delta_w = value;
+        //momentum term built into neuron
+        m_weights[index] = KahanSum(m_weights[index], value + momentum * m_prev_delta_w);
         m_valid = false;
     }
 
@@ -67,22 +72,24 @@ namespace nnet {
     }
 
     double Neuron::getNet() {
-        double acc;
-        for (int i = 0; i < m_size; i++) {
-            acc += m_weights[i].sum*m_inputs[i];
-        }        
-        return acc;
+        if (!m_valid)
+        {        
+            double acc;
+            for (int i = 0; i < m_size; i++) {
+                acc += m_weights[i].sum*m_inputs[i];
+            }
+            //cache last value of this function
+            m_net = acc;
+            //keep track of the validity of cached value
+            m_valid = true;
+            return acc;
+        }
+        else
+            return m_net;
     }
 
-    double Neuron::getOutput() {
-        //memoise result
-        if (m_valid)
-            return m_output;
-        else {
-            //we now have a valid value for output cached
-            m_valid = true;
-            return m_function.apply(getNet());
-        }
+    double Neuron::getOutput(int deriv) {
+            return m_function.apply(getNet(), deriv);        
     }
 
     void Neuron::randomizeWeights() {
