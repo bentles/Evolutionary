@@ -2,69 +2,57 @@
 
 namespace nnet {
     //output column that is negative means no ouput
-    DataSet::DataSet(const string &filename, int output_column)
+    DataSet::DataSet(const string &independent)
     {
-        vector<string> strings = getStrings(filename);
+        vector<string> strings = getStrings(independent);
+        
         assert(strings.size() > 0); //dataset must have entries
         assert(strings[0].size() > 0); //entry must have fields, not gonna validate them all though
         
-        //output column is either:
-        //negative for no output
-        //0 for the first column or (size - 1) for the last column     
-        assert(output_column <= 0 || output_column == (strings[0].size() - 1));
-        
-        m_output_column = output_column;
-        
-        for (int i = 0; i < strings.size(); i++) {
-            if (output_column < 0) //no output
-            {                
-                vector<string> fields = split(strings[i], ',');           
-                std::vector<double> doubleVector(fields.size());
-
-                for (int i = 0; i < fields.size(); i++) {
-                    doubleVector[i] = stod(fields[i]);
-                }
-                
-                m_patterns.push_back(doubleVector);
+        for (int i = 0; i < strings.size(); i++)
+        {
+            vector<string> fields = split(strings[i], ',');           
+            std::vector<double> doubleVector(fields.size());
+            for (int k = 0; k < fields.size(); k++) {
+                doubleVector[k] = stod(fields[k]);
             }
-            else {                
-                int pos;
-                string rest_text;
-
-                if (output_column == 0) {
-                    pos = strings[i].find(",");
-                    string rest_text = strings[i].substr(pos + 1);
-                    m_outputs[i] = stod(strings[i].substr(0, pos));
-                }
-                else {
-                    pos = strings[i].find_last_of(",");
-                    string rest_text = strings[i].substr(0, pos);
-                    m_outputs[i] = stod(strings[i].substr(pos+1));
-                }
+            m_patterns.push_back(doubleVector);
+        }        
                 
-                vector<string> rest = split(rest_text, ',');            
-                std::vector<double> doubleVector(rest.size());
-                for (int i = 0; i < rest.size(); i++) {
-                    doubleVector[i] = stod(rest[i]);
-                }
-                m_patterns.push_back(doubleVector);
-            }
-        }
     }
 
     int DataSet::size() {
-        return m_patterns.size();
+        return m_patterns.size(); 
     }
 
     //we can just copy this each time it's no big deal
-    double DataSet::getOutput(int i) {
-        assert(m_output_column >= 0);
-        return m_patterns[i][m_output_column];
+    vector<double> DataResultsSet::getOutputs(int i) {
+        return m_dependents[i];
     }
 
     //want access to pattern without copying but don't want them to be able to modify it
     const vector<double> &DataSet::getPattern(int i) {
         return m_patterns[i];            
+    }
+
+
+    DataResultsSet::DataResultsSet(const string &independent,
+                                   const string &dependent) : DataSet(independent)
+    {
+        vector<string> strings = getStrings(dependent);
+        
+        assert(strings.size() > 0); //dataset must have entries
+        assert(strings[0].size() > 0); //entry must have fields, not gonna validate them all though
+        
+        for (int i = 0; i < strings.size(); i++)
+        {
+            vector<string> fields = split(strings[i], ',');           
+            std::vector<double> doubleVector(fields.size());
+            for (int k = 0; k < fields.size(); k++) {
+                doubleVector[k] = stod(fields[k]);
+            }
+            m_dependents.push_back(doubleVector);
+        }   
     }
     
     vector<string> &split(const string &s, char delim, vector<string> &elems) {

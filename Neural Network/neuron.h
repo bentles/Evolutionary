@@ -21,7 +21,6 @@ namespace nnet
         bool m_valid;
         int m_size;
         Func& m_function;
-
         double getNet();
     public:
         double getInput(int index);

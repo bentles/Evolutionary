@@ -9,12 +9,10 @@ int main(int argc, char *argv[])
 {
     
     using namespace nnet;
-    string a = "../Assignment 1/SalTraining.csv";
-    vector< vector<double> > data = getDataCsv(a);
-    int neuron_size = data.size() - 1;
-    
-    Linear lin;
-    Neuron priceNeuron(neuron_size, &lin);
+    string indep = "../Data/HourlyInput.csv";
+    string dep = "../Data/HourlyOutput.csv";
+    DataResultsSet drs = DataResultsSet(indep , dep);
+
     
     return 0;
 }

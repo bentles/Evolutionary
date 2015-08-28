@@ -17,14 +17,20 @@ namespace nnet
 {
     class DataSet {
     private:
-        int m_output_column;
-        vector<double> m_outputs;
         vector<vector<double> > m_patterns;
     public:
-        DataSet(const string &filename, int output_column = -1);
+        DataSet(const string &indepenent);
         const vector<double> &getPattern(int i);
-        int size();
-        double getOutput(int i);
+        int size();        
+    };
+
+    class DataResultsSet : DataSet {
+    private:
+        vector<vector<double> > m_dependents;
+    public:
+        DataResultsSet(const string &independent, const string &dependent);
+        vector<double> getOutputs(int i);
+
         
     };
     

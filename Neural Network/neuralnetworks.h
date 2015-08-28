@@ -2,8 +2,9 @@
 #define NEURAL_NETWORKS_H
 
 #include <vector>
-#include "neuron.h"
+#include <math.h>
 #include "neurIO.h"
+#include "neuron.h"
 
 using std::vector;
 
@@ -15,8 +16,8 @@ namespace nnet
         vector<Neuron> m_input_layer;
         vector<Neuron> m_hidden_layer;
         vector<Neuron> m_output_layer;
-        DataSet m_training;
-        DataSet m_verification;
+        DataResultsSet m_training;
+        DataResultsSet m_verification;
         DataSet m_testing;
     public:
         // the idea is to have this take in vectors of customly created layers
@@ -26,12 +27,13 @@ namespace nnet
         StandardFFNN(vector<Neuron> input_layer,
                      vector<Neuron> hidden_layer,
                      vector<Neuron> output_layer,
-                     const DataSet &training,
-                     const DataSet &verification,
+                     const DataResultsSet &training,
+                     const DataResultsSet &verification,
                      const DataSet &test);
 
         vector<double> getOutputs(const vector<double> &pattern);
         void updateWeightsStochastic(int pattern, double learn_rate, double momentum);
+        double getSSE(int pattern);
     };
 }
 

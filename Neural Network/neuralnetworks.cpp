@@ -5,8 +5,8 @@ namespace nnet
     StandardFFNN::StandardFFNN(vector<Neuron> input_layer,
                                vector<Neuron> hidden_layer,
                                vector<Neuron> output_layer,
-                               const DataSet &training,
-                               const DataSet &verification,
+                               const DataResultsSet &training,
+                               const DataResultsSet &verification,
                                const DataSet &testing) :
         m_input_layer(input_layer),
         m_hidden_layer(hidden_layer),
@@ -47,12 +47,14 @@ namespace nnet
         return outputs;
     }
 
-    void StandardFFNN::updateWeightsStochastic(int pattern, double learn_rate, double momentum) {
+    void StandardFFNN::updateWeightsStochastic(int pattern,
+                                               double learn_rate,
+                                               double momentum) {
         //deltaO_k = (t_k - o_k) * f'(o_k0)
         vector<double> deltaO_k;
         for(int i = 0; i < m_output_layer.size(); i++) {
             deltaO_k.push_back(
-                -(m_training.getOutput(pattern) - m_output_layer[i].getOutput()) *
+                -(m_training.getOutputs(pattern)[i] - m_output_layer[i].getOutput()) *
                 m_output_layer[i].getOutput(1)) ;
         }
 
@@ -107,4 +109,13 @@ namespace nnet
         }
     }
 
+    double StandardFFNN::getSSE(int pattern)
+    {
+        double acc = 0;
+        for (int k = 0; k < m_output_layer.size(); k++) {
+            acc += pow(m_training.getOutputs(pattern)[k] - m_output_layer[k].getOutput(), 2);
+        }
+
+        acc /= m_output_layer.size();
+    }   
 }
