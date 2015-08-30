@@ -28,16 +28,16 @@ int main(int argc, char *argv[])
     
     StandardFFNN network = StandardFFNN(
         lin, 5,
-        cos, 5, //how many of these should I have? we shall experiment
+        sig, 5, //how many of these should I have? we shall experiment
         lin, 1,
         training,
         validation );
 
     //method chaining <3
     network
-        .setLearnRate(0.01)
-        .setMomentum(0.7)
-        .trainFor(1000)
+        .setLearnRate(0.001)
+        .setMomentum(0.9)
+        .trainFor(5000, true)
         .setTrainingSet(training2)
         .printOutputs();    
     return 0;
