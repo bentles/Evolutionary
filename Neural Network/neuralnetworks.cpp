@@ -145,12 +145,29 @@ namespace nnet
     }
    
     StandardFFNN& StandardFFNN::trainFor(int iterations) {
+        
         std::cout << m_training.size() << std::endl;
         for (int i = 0; i < iterations; i++) {
+            m_training.shuffle();
+            double sse_sum = 0;
+            std::cout << "iteration " << i << ": " << std::endl;
             for (int k = 0; k < m_training.size(); k++) {
                 updateWeightsStochastic(k);
-                //std::cout << k << std::endl;
+                sse_sum += getSSE(k);
             }
+            std::cout << "MSE: " << sse_sum/m_training.size() << std::endl;            
+        }
+        return *this;
+    }
+
+    StandardFFNN& StandardFFNN::printOutputs()
+    {
+        for (int i = 0; i < m_training.size(); i++) {
+            int j = 0;            
+            for (; j < m_output_layer.size() - 1; j++) {
+                std::cout << getOutputs(i)[j] << ", " ;
+            }
+            std::cout << getOutputs(i)[j] << std::endl;
         }
         return *this;
     }

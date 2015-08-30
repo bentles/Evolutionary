@@ -42,6 +42,7 @@ namespace nnet
         StandardFFNN& setLearnRate(double rate);
         StandardFFNN& setMomentum(double momentum);
         StandardFFNN& trainFor(int iterations);
+        StandardFFNN& printOutputs();
     };
 }
 

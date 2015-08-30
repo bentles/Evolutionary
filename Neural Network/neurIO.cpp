@@ -21,6 +21,34 @@ namespace nnet {
                 
     }
 
+    void DataSet::print()
+    {
+        for (int i = 0; i < m_patterns.size(); i++) {
+            int j = 0;
+            for (; j < m_patterns[0].size() -1; j++) {
+                std::cout << m_patterns[i][j] << ", ";
+            }
+            std::cout << m_patterns[i][j] << std::endl;
+        }
+
+    }
+
+    //good ole fisher yates
+    void DataSet::shuffle()
+    {
+        std::random_device rd;
+        std::mt19937 mt(rd());
+        std::uniform_real_distribution<double> dist(0,1);
+        
+        for (int i = m_patterns.size(); i > 0; i--) {
+            int pos = (int)floor(dist(mt) * i + 1);
+            vector<double> temp = m_patterns[i];
+            m_patterns[i] = m_patterns[pos];
+            m_patterns[pos] = temp;
+        }
+
+    }
+
     int DataSet::size() {
         return m_patterns.size(); 
     }

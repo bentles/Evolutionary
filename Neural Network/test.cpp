@@ -13,14 +13,14 @@ int main(int argc, char *argv[])
 
 
     //get data into useful format
-    string indep_t = "../Data/Training2/HourlyInputTraining.csv";
-    string dep_t = "../Data/Training2/HourlyOutputTraining.csv";
+    string indep_t = "../Data/Training1/HourlyInputTraining.csv";
+    string dep_t = "../Data/Training1/HourlyOutputTraining.csv";
     DataResultsSet training = DataResultsSet(indep_t , dep_t);
     
     string indep_v = "../Data/Validation1/HourlyInputValidation.csv";
     string dep_v = "../Data/Validation1/HourlyOutputValidation.csv";
     DataResultsSet validation = DataResultsSet(indep_v , dep_v);
-
+    
     Linear lin;
     Sigmoid sig;
     Cosine cos;
@@ -32,13 +32,10 @@ int main(int argc, char *argv[])
         training,
         validation );
 
+    //method chaining <3
     network
         .setLearnRate(0.00001)
-        .setMomentum(0.001)
-        .trainFor(10);
-
-    for (int i = 0; i < training.size(); i++) {
-        std::cout << network.getOutputs(i)[0] << std::endl;
-        }    
+        .setMomentum(0.0001)
+        .trainFor(1000);    
     return 0;
 }

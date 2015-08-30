@@ -7,6 +7,8 @@
 #include <string>
 #include <sstream>
 #include <cassert>
+#include <random>
+#include <math.h>
 
 using std::string;
 using std::vector;
@@ -23,6 +25,8 @@ namespace nnet
         const vector<double> &getPattern(int i);
         int size();
         int fieldSize();
+        void shuffle();
+        void print();
     };
 
     class DataResultsSet : public DataSet {
