@@ -117,9 +117,9 @@ namespace nnet
         }
 
         //weights on hiddens (from input to hidden) DeltaV_ji
-        for (int j = 0; j < m_output_layer.size(); j++) {
-            for (int i = 0; i < m_hidden_layer.size(); i++) {
-                m_output_layer[j].addWeight(i, DeltaV_ji[j][i], m_momentum);
+        for (int j = 0; j < m_hidden_layer.size(); j++) {
+            for (int i = 0; i < m_input_layer.size(); i++) {
+                m_hidden_layer[j].addWeight(i, DeltaV_ji[j][i], m_momentum);
             }
         }
     }
@@ -134,15 +134,17 @@ namespace nnet
         acc /= m_output_layer.size();
     }
 
-    void StandardFFNN::setLearnRate(double rate) {
+    StandardFFNN& StandardFFNN::setLearnRate(double rate) {
         m_learn_rate = rate;
+        return *this;
     }
 
-    void StandardFFNN::setMomentum(double momentum) {
+    StandardFFNN& StandardFFNN::setMomentum(double momentum) {
         m_momentum = momentum;
+        return *this;
     }
    
-    void StandardFFNN::trainFor(int iterations) {
+    StandardFFNN& StandardFFNN::trainFor(int iterations) {
         std::cout << m_training.size() << std::endl;
         for (int i = 0; i < iterations; i++) {
             for (int k = 0; k < m_training.size(); k++) {
@@ -150,5 +152,6 @@ namespace nnet
                 //std::cout << k << std::endl;
             }
         }
+        return *this;
     }
 }

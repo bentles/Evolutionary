@@ -39,9 +39,9 @@ namespace nnet
 
         vector<double> getOutputs(int pattern);
         double getSSE(int pattern);
-        void setLearnRate(double rate);
-        void setMomentum(double momentum);
-        void trainFor(int iterations);
+        StandardFFNN& setLearnRate(double rate);
+        StandardFFNN& setMomentum(double momentum);
+        StandardFFNN& trainFor(int iterations);
     };
 }
 

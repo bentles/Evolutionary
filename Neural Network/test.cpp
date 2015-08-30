@@ -32,10 +32,10 @@ int main(int argc, char *argv[])
         training,
         validation );
 
-    network.setLearnRate(0.00001);
-    network.setMomentum(0.001);
-    
-    network.trainFor(10);
+    network
+        .setLearnRate(0.00001)
+        .setMomentum(0.001)
+        .trainFor(10);
 
     for (int i = 0; i < training.size(); i++) {
         std::cout << network.getOutputs(i)[0] << std::endl;
