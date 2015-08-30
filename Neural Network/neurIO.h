@@ -18,14 +18,13 @@ using std::stod;
 namespace nnet
 {
     class DataSet {
-    private:
+    protected:
         vector<vector<double> > m_patterns;
     public:
         DataSet(const string &indepenent);
         const vector<double> &getPattern(int i);
         int size();
         int fieldSize();
-        void shuffle();
         void print();
     };
 
@@ -35,7 +34,7 @@ namespace nnet
     public:
         DataResultsSet(const string &independent, const string &dependent);
         vector<double> getOutputs(int i);
-        //void shuffle();        
+        void shuffle();
     };
     
     vector<string> getStrings(const string &filename);

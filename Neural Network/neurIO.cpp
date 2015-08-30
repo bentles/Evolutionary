@@ -34,7 +34,7 @@ namespace nnet {
     }
 
     //good ole fisher yates
-    void DataSet::shuffle()
+    void DataResultsSet::shuffle()
     {
         std::random_device rd;
         std::mt19937 mt(rd());
@@ -42,9 +42,16 @@ namespace nnet {
         
         for (int i = m_patterns.size(); i > 0; i--) {
             int pos = (int)floor(dist(mt) * i + 1);
+            //patterns
             vector<double> temp = m_patterns[i];
             m_patterns[i] = m_patterns[pos];
             m_patterns[pos] = temp;
+            
+            //results
+            vector<double> temp2 = m_dependents[i];
+            m_dependents[i] = m_dependents[pos];
+            m_dependents[pos] = temp2;
+
         }
 
     }

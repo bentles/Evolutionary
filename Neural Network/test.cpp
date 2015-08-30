@@ -13,8 +13,8 @@ int main(int argc, char *argv[])
 
 
     //get data into useful format
-    string indep_t = "../Data/Training1/HourlyInputTraining.csv";
-    string dep_t = "../Data/Training1/HourlyOutputTraining.csv";
+    string indep_t = "../Data/Training3/HourlyInputTraining.csv";
+    string dep_t = "../Data/Training3/HourlyOutputTraining.csv";
     DataResultsSet training = DataResultsSet(indep_t , dep_t);
     
     string indep_v = "../Data/Validation1/HourlyInputValidation.csv";
@@ -27,7 +27,7 @@ int main(int argc, char *argv[])
     
     StandardFFNN network = StandardFFNN(
         lin, 5,
-        cos, 5, //how many of these should I have? we shall experiment
+        sig, 5, //how many of these should I have? we shall experiment
         lin, 1,
         training,
         validation );
