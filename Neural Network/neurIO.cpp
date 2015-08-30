@@ -25,6 +25,10 @@ namespace nnet {
         return m_patterns.size(); 
     }
 
+    int DataSet::fieldSize() {
+        return m_patterns[0].size();
+    }
+    
     //we can just copy this each time it's no big deal
     vector<double> DataResultsSet::getOutputs(int i) {
         return m_dependents[i];

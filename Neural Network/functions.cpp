@@ -13,6 +13,18 @@ namespace nnet {
         
     }
 
+    double Cosine::apply(double net, int deriv) {
+        int dmod4 = deriv % 4;
+        if (dmod4 == 0)
+            return cos(net);
+        else if (dmod4 == 1)
+            return -sin(net);
+        else if (dmod4 == 2)
+            return -cos(net);
+        else
+            return sin(net);
+    }
+
     double Linear::apply(double net, int deriv) {
         return net;
     }

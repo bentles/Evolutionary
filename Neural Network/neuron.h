@@ -1,5 +1,5 @@
 #ifndef NEURON_H
-#define NERUON_H
+#define NEURON_H
 
 #include <vector>
 #include <stdlib.h>
@@ -25,7 +25,7 @@ namespace nnet
     public:
         double getInput(int index);
         double getWeight(int index);
-        Neuron(int s, Func* function);        
+        Neuron(int s, Func& function);        
         void printWeights();
         void setWeight(int index, double value);
         void addWeight(int index, double value, double momentum = 0);

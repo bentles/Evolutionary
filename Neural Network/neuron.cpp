@@ -5,7 +5,7 @@
 
 namespace nnet {
     //size excludes bias
-    Neuron::Neuron(int size, Func* function) : m_function(*function), m_size(size + 1) {
+    Neuron::Neuron(int size, Func& function) : m_function(function), m_size(size + 1), m_valid(false) {
         for(int i = 0; i < m_size; i++) {
             m_weights.push_back({0});
             m_inputs.push_back(0);
@@ -14,8 +14,8 @@ namespace nnet {
         m_weights.push_back({0});
         m_inputs.push_back(-1);
 
-        //m_output is not a valid output
-        m_valid = false;
+        //randomise weights
+        randomizeWeights();
     }
 
     void Neuron::setInput(int index, double value) {
@@ -75,7 +75,7 @@ namespace nnet {
         if (!m_valid)
         {        
             double acc;
-            for (int i = 0; i < m_size; i++) {
+            for (int i = 0; i <= m_size; i++) {
                 acc += m_weights[i].sum*m_inputs[i];
             }
             //cache last value of this function
@@ -93,7 +93,7 @@ namespace nnet {
     }
 
     void Neuron::randomizeWeights() {
-        for (int i = 1; i < m_size; i++) {
+        for (int i = 0; i < m_size; i++) {
             m_weights[i].correction = 0;
             m_weights[i].sum = ((double) rand() / (RAND_MAX))/ 10; //want these to be small
         }

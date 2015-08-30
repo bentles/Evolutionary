@@ -21,17 +21,17 @@ namespace nnet
     public:
         DataSet(const string &indepenent);
         const vector<double> &getPattern(int i);
-        int size();        
+        int size();
+        int fieldSize();
     };
 
-    class DataResultsSet : DataSet {
+    class DataResultsSet : public DataSet {
     private:
         vector<vector<double> > m_dependents;
     public:
         DataResultsSet(const string &independent, const string &dependent);
         vector<double> getOutputs(int i);
-
-        
+        //void shuffle();        
     };
     
     vector<string> getStrings(const string &filename);

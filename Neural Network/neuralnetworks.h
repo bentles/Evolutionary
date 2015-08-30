@@ -5,6 +5,7 @@
 #include <math.h>
 #include "neurIO.h"
 #include "neuron.h"
+#include "functions.h"
 
 using std::vector;
 
@@ -18,22 +19,29 @@ namespace nnet
         vector<Neuron> m_output_layer;
         DataResultsSet m_training;
         DataResultsSet m_verification;
-        DataSet m_testing;
+        double m_learn_rate;
+        double m_momentum;
+
+        void updateWeightsStochastic(int pattern);
     public:
         // the idea is to have this take in vectors of customly created layers
         // though i guess some assumptions may have to be made about these vectors
         // for training
         // TODO:do all elems of a vector need the same activation fn??
-        StandardFFNN(vector<Neuron> input_layer,
-                     vector<Neuron> hidden_layer,
-                     vector<Neuron> output_layer,
-                     const DataResultsSet &training,
-                     const DataResultsSet &verification,
-                     const DataSet &test);
+        StandardFFNN(Func &input_func,
+                               int nr_inputs,
+                               Func &hidden_func,
+                               int nr_hiddens,
+                               Func &output_func,
+                               int nr_outputs,                               
+                               const DataResultsSet &training,
+                               const DataResultsSet &verification);
 
-        vector<double> getOutputs(const vector<double> &pattern);
-        void updateWeightsStochastic(int pattern, double learn_rate, double momentum);
+        vector<double> getOutputs(int pattern);
         double getSSE(int pattern);
+        void setLearnRate(double rate);
+        void setMomentum(double momentum);
+        void trainFor(int iterations);
     };
 }
 
