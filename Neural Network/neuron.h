@@ -20,6 +20,7 @@ namespace nnet
         double m_prev_delta_w;
         bool m_valid;
         int m_size;
+        
         Func& m_function;
         double getNet();
     public:

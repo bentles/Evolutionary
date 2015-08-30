@@ -9,8 +9,7 @@ namespace nnet {
         {
             double signet = 1/(1 + exp(-net*(1)));
             return signet * (1 - signet);
-        }
-        
+        }        
     }
 
     double Cosine::apply(double net, int deriv) {
@@ -26,7 +25,12 @@ namespace nnet {
     }
 
     double Linear::apply(double net, int deriv) {
-        return net;
+        if (deriv == 0)
+            return net;
+        else if (deriv == 1)
+            return 1;
+        else
+            return 0;
     }
 
     double Ramp::apply(double net, int deriv) {
@@ -35,7 +39,7 @@ namespace nnet {
         else if (net > 1)
             return 1;
         else
-            return net;
+            return net;        
     }
 
     double Step::apply(double net, int deriv) {

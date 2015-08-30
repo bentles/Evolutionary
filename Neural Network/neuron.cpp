@@ -5,7 +5,12 @@
 
 namespace nnet {
     //size excludes bias
-    Neuron::Neuron(int size, Func& function) : m_function(function), m_size(size + 1), m_valid(false) {
+    Neuron::Neuron(int size, Func& function) :
+        m_function(function),
+        m_size(size + 1),
+        m_valid(false),
+        m_prev_delta_w(0) {
+        
         for(int i = 0; i < m_size; i++) {
             m_weights.push_back({0});
             m_inputs.push_back(0);
