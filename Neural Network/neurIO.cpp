@@ -40,8 +40,9 @@ namespace nnet {
         std::mt19937 mt(rd());
         std::uniform_real_distribution<double> dist(0,1);
         
-        for (int i = m_patterns.size(); i > 0; i--) {
-            int pos = (int)floor(dist(mt) * i + 1);
+        for (int i = m_patterns.size() - 1; i > 0; i--) {
+            int pos = (int)floor(dist(mt) * (i + 1));
+            
             //patterns
             vector<double> temp = m_patterns[i];
             m_patterns[i] = m_patterns[pos];
@@ -51,7 +52,6 @@ namespace nnet {
             vector<double> temp2 = m_dependents[i];
             m_dependents[i] = m_dependents[pos];
             m_dependents[pos] = temp2;
-
         }
 
     }

@@ -28,7 +28,8 @@ namespace nnet
             m_output_layer.push_back(Neuron(nr_hiddens, output_func));
         }
     }
-    
+
+        
 
     vector<double> StandardFFNN::getOutputs(int pattern) {
         //need as many outputs as there are output neurons
@@ -67,7 +68,7 @@ namespace nnet
         vector<double> deltaO_k;
         for(int k = 0; k < m_output_layer.size(); k++) {
             deltaO_k.push_back(
-                -(m_training.getOutputs(pattern)[k] - m_output_layer[k].getOutput()) *
+-(m_training.getOutputs(pattern)[k] - m_output_layer[k].getOutput()) *
                 m_output_layer[k].getOutput(1)) ;
         }
 
@@ -144,18 +145,18 @@ namespace nnet
         return *this;
     }
    
-    StandardFFNN& StandardFFNN::trainFor(int iterations) {
-        
-        std::cout << m_training.size() << std::endl;
+    StandardFFNN& StandardFFNN::trainFor(int iterations, bool verbose) {       
         for (int i = 0; i < iterations; i++) {
             m_training.shuffle();
             double sse_sum = 0;
-            std::cout << "iteration " << i << ": " << std::endl;
             for (int k = 0; k < m_training.size(); k++) {
                 updateWeightsStochastic(k);
                 sse_sum += getSSE(k);
             }
-            std::cout << "MSE: " << sse_sum/m_training.size() << std::endl;            
+            if (verbose) {
+                std::cout << "iteration " << i << ": " << std::endl;
+                std::cout << "MSE: " << sse_sum/m_training.size() << std::endl;
+            }     
         }
         return *this;
     }
@@ -169,6 +170,12 @@ namespace nnet
             }
             std::cout << getOutputs(i)[j] << std::endl;
         }
+        return *this;
+    }
+
+    StandardFFNN& StandardFFNN::setTrainingSet(DataResultsSet train_set)
+    {
+        m_training = train_set;
         return *this;
     }
 }

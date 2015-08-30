@@ -14,8 +14,9 @@ int main(int argc, char *argv[])
 
     //get data into useful format
     string indep_t = "../Data/Training3/HourlyInputTraining.csv";
-    string dep_t = "../Data/Training3/HourlyOutputTraining.csv";
+    string dep_t = "../Data/Training1/HourlyOutputTraining.csv";
     DataResultsSet training = DataResultsSet(indep_t , dep_t);
+    DataResultsSet training2 = DataResultsSet(indep_t , dep_t);
     
     string indep_v = "../Data/Validation1/HourlyInputValidation.csv";
     string dep_v = "../Data/Validation1/HourlyOutputValidation.csv";
@@ -27,7 +28,7 @@ int main(int argc, char *argv[])
     
     StandardFFNN network = StandardFFNN(
         lin, 5,
-        sig, 5, //how many of these should I have? we shall experiment
+        cos, 5, //how many of these should I have? we shall experiment
         lin, 1,
         training,
         validation );
@@ -35,7 +36,9 @@ int main(int argc, char *argv[])
     //method chaining <3
     network
         .setLearnRate(0.01)
-        .setMomentum(0.9)
-        .trainFor(1000);    
+        .setMomentum(0.7)
+        .trainFor(1000)
+        .setTrainingSet(training2)
+        .printOutputs();    
     return 0;
 }

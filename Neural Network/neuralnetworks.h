@@ -41,8 +41,9 @@ namespace nnet
         double getSSE(int pattern);
         StandardFFNN& setLearnRate(double rate);
         StandardFFNN& setMomentum(double momentum);
-        StandardFFNN& trainFor(int iterations);
+        StandardFFNN& trainFor(int iterations, bool verbose = false);
         StandardFFNN& printOutputs();
+        StandardFFNN& setTrainingSet(DataResultsSet train_set);
     };
 }
 
