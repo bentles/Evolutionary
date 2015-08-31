@@ -64,15 +64,27 @@ namespace nnet
 
     void StandardFFNN::updateWeightsStochastic(int pattern) {
         getOutputs(pattern);
-        //deltaO_k = (t_k - o_k) * f'(o_k0)
+        //output gradients: deltaO_k = (t_k - o_k) * f'(o_k0)
         vector<double> deltaO_k;
         for(int k = 0; k < m_output_layer.size(); k++) {
             deltaO_k.push_back(
--(m_training.getOutputs(pattern)[k] - m_output_layer[k].getOutput()) *
+                -(m_training.getOutputs(pattern)[k] - m_output_layer[k].getOutput()) *
                 m_output_layer[k].getOutput(1)) ;
         }
 
-        //get weight updates for hidden to output
+        //Hidden gradients: deltaY_j = 
+        vector<double> deltaY_j;
+        for (int j = 0; j < m_hidden_layer.size(); j++) {
+            double sum = 0;
+            for (int k = 0; k < m_output_layer.size(); k++) {
+                sum += deltaO_k[k] *
+                    m_output_layer[k].getWeight(j) *
+                    m_hidden_layer[j].getOutput(1);
+            }
+            deltaY_j.push_back(sum);
+        }        
+
+        //get and apply weight updates for hidden to output
         vector<vector<double> > DeltaW_kj;
         for (int k = 0; k < m_output_layer.size(); k++) {
             vector<double> dubvect;
@@ -83,20 +95,8 @@ namespace nnet
             }
             DeltaW_kj.push_back(dubvect);
         }
-
-        //deltaY_j = 
-        vector<double> deltaY_j;
-        for (int j = 0; j < m_hidden_layer.size(); j++) {
-            double sum = 0;
-            for (int k = 0; k < m_output_layer.size(); k++) {
-                sum += deltaO_k[k] *
-                    m_output_layer[k].getWeight(j) *
-                    m_hidden_layer[j].getOutput(1);
-            }
-            deltaY_j.push_back(sum);
-        }
         
-        //get weight updates for input to hidden
+        //get and apply weight updates for input to hidden
         vector<vector<double> > DeltaV_ji;
         for (int j = 0; j < m_hidden_layer.size(); j++) {
             vector<double> dubvect;

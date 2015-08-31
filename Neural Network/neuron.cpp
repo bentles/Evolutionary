@@ -98,7 +98,7 @@ namespace nnet {
     }
 
     void Neuron::randomizeWeights() {
-        for (int i = 0; i < m_size; i++) {
+        for (int i = 0; i <= m_size; i++) {
             m_weights[i].correction = 0;
             m_weights[i].sum = ((double) rand() / (RAND_MAX))/ 10; //want these to be small
         }
