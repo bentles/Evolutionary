@@ -13,10 +13,14 @@ namespace nnet {
         
         for(int i = 0; i < m_size; i++) {
             m_weights.push_back({0});
+            m_prev_delta_w.push_back(0);
+            
             m_inputs.push_back(0);
         }        
         //bias
         m_weights.push_back({0});
+        m_prev_delta_w.push_back(0);
+        
         m_inputs.push_back(-1);
 
         //randomise weights
@@ -60,11 +64,12 @@ namespace nnet {
         m_valid = false;
     }
 
-    void Neuron::addWeight(int index, double value, double momentum) {
-        assert(index >= 0 && index < m_size);
-        m_prev_delta_w = value;
+    void Neuron::addWeight(int i, double value, double momentum) {
+        assert(i >= 0 && i < m_size);
         //momentum term built into neuron
-        m_weights[index] = KahanSum(m_weights[index], value + momentum * m_prev_delta_w);
+        m_weights[i] = KahanSum(m_weights[i], value + momentum * m_prev_delta_w[i]);
+        //save last weight update
+        m_prev_delta_w[i] = value;
         m_valid = false;
     }
 

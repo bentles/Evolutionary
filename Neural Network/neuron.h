@@ -8,18 +8,18 @@
 
 using std::vector;
 
-typedef std::vector<double> row_t;
-
 namespace nnet
 {
     class Neuron {
     private:
-        std::vector<KahanAccumulation> m_weights;
-        row_t m_inputs;
-        double m_net;
-        double m_prev_delta_w;
-        bool m_valid;
+        vector<KahanAccumulation> m_weights;
+        vector<double> m_inputs;
+        vector<double> m_prev_delta_w;
         int m_size;
+
+        //cache net value, change valid to false invalidate cached value
+        double m_net;
+        bool m_valid;
         
         Func& m_function;
         double getNet();

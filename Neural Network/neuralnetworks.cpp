@@ -85,42 +85,22 @@ namespace nnet
         }        
 
         //get and apply weight updates for hidden to output
-        vector<vector<double> > DeltaW_kj;
         for (int k = 0; k < m_output_layer.size(); k++) {
-            vector<double> dubvect;
-            for (int j = 0; j < m_hidden_layer.size(); j++) {                
-                dubvect.push_back(-m_learn_rate *
+            for (int j = 0; j < m_hidden_layer.size(); j++) {
+                double update = -m_learn_rate *
                                      m_hidden_layer[j].getOutput() *
-                                     deltaO_k[k]);
+                                     deltaO_k[k];
+                m_output_layer[k].addWeight(j, update, m_momentum);
             }
-            DeltaW_kj.push_back(dubvect);
         }
         
         //get and apply weight updates for input to hidden
-        vector<vector<double> > DeltaV_ji;
         for (int j = 0; j < m_hidden_layer.size(); j++) {
-            vector<double> dubvect;
             for (int i = 0; i < m_input_layer.size(); i++) {                
-                dubvect.push_back(-m_learn_rate *
+                double update = -m_learn_rate *
                                   deltaY_j[j] *
-                                  m_input_layer[i].getOutput());
-            }
-            DeltaV_ji.push_back(dubvect);
-        }
-        
-        //apply weight updates
-        //====================
-        //weights on outputs (from hidden to output) DeltaW_kj
-        for (int k = 0; k < m_output_layer.size(); k++) {
-            for (int j = 0; j < m_hidden_layer.size(); j++) {
-                m_output_layer[k].addWeight(j, DeltaW_kj[k][j], m_momentum);
-            }
-        }
-
-        //weights on hiddens (from input to hidden) DeltaV_ji
-        for (int j = 0; j < m_hidden_layer.size(); j++) {
-            for (int i = 0; i < m_input_layer.size(); i++) {
-                m_hidden_layer[j].addWeight(i, DeltaV_ji[j][i], m_momentum);
+                                  m_input_layer[i].getOutput();
+                m_hidden_layer[j].addWeight(i, update, m_momentum);
             }
         }
     }
