@@ -24,6 +24,18 @@ namespace nnet {
             return sin(net);
     }
 
+    double Sine::apply(double net, int deriv) {
+        int dmod4 = deriv % 4;
+        if (dmod4 == 0)
+            return sin(net);
+        else if (dmod4 == 1)
+            return cos(net);
+        else if (dmod4 == 2)
+            return -sin(net);
+        else
+            return -cos(net);
+    }
+
     double Linear::apply(double net, int deriv) {
         if (deriv == 0)
             return net;

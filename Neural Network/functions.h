@@ -18,6 +18,12 @@ namespace nnet
         virtual double apply(double net, int deriv = 0);  
     };
 
+    class Sine : public Func {
+    public:
+        Sine() : Func(INT_MAX){}
+        virtual double apply(double net, int deriv = 0);  
+    };
+
     class Ramp : public Func {
     public:
         Ramp() : Func(0){}

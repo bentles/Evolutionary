@@ -30,6 +30,7 @@ namespace nnet
         void printWeights();
         void setWeight(int index, double value);
         void addWeight(int index, double value, double momentum = 0);
+        void addBiasWeight(double value, double momentum = 0);
         void setInput(int index, double value);
         void setInputs(const vector<double> &pattern);
         void initBiasInput(double value);

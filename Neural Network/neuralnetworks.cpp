@@ -9,11 +9,14 @@ namespace nnet
                                Func &output_func,
                                int nr_outputs,                               
                                const DataResultsSet &training,
-                               const DataResultsSet &verification) :
+                               const DataResultsSet &verification,
+                               const DataSet &test) :
         m_training(training),
         m_verification(verification),
+        m_test(test),
         m_learn_rate(0.0001),
-        m_momentum(0)
+        m_momentum(0),
+        m_verbose(false)
     {
         //create layers
         for (int i = 0; i < nr_inputs; i++) {
@@ -29,15 +32,51 @@ namespace nnet
         }
     }
 
-        
+    StandardFFNN::StandardFFNN(Func &input_func,
+                               int nr_inputs,
+                               vector<Neuron> hidden,
+                               Func &output_func,
+                               int nr_outputs,                               
+                               const DataResultsSet &training,
+                               const DataResultsSet &verification,
+                               const DataSet &test) :
+        m_hidden_layer(hidden),
+        m_training(training),
+        m_test(test),
+        m_verification(verification),
+        m_learn_rate(0.0001),
+        m_momentum(0),
+        m_verbose(false)
+    {
+        //create layers
+        for (int i = 0; i < nr_inputs; i++) {
+            m_input_layer.push_back(Neuron(1, input_func));
+        }
 
-    vector<double> StandardFFNN::getOutputs(int pattern) {
+        for (int i = 0; i < nr_outputs; i++) {
+            m_output_layer.push_back(Neuron(hidden.size(), output_func));
+        }
+    }
+
+    vector<double> StandardFFNN::getOutputs(int pattern, int set) {
+        //TODO: this is super slow
+        // make each neuron take a list of other neurons for input perhaps
+        
         //need as many outputs as there are output neurons
         vector<double> outputs(m_output_layer.size());
 
-        //put input into input layer
+        assert(set >= 0 && set <= 2);
+            //put input into input layer
         for(int i = 0; i < m_input_layer.size(); i++) {
-            m_input_layer[i].setInput(0, m_training.getPattern(pattern)[i]);
+            double value = 0;
+            if (set == 0)
+                value = m_training.getPattern(pattern)[i];
+            else if (set == 1)
+                value = m_verification.getPattern(pattern)[i];
+            else
+                value = m_test.getPattern(pattern)[i];
+                
+            m_input_layer[i].setInput(0, value);
         }
 
         //set hidden inputs from input outputs
@@ -103,14 +142,34 @@ namespace nnet
                 m_hidden_layer[j].addWeight(i, update, m_momentum);
             }
         }
+
+        //learned how to update bias weights from:
+        //https://visualstudiomagazine.com/Articles/2013/08/01/Neural-Network-Back-Propagation-Using-C.aspx?Page=3
+        
+        for (int i = 0; i < m_hidden_layer.size(); ++i)
+        {
+            double delta = m_learn_rate * deltaY_j[i] * 1.0; 
+            m_hidden_layer[i].addBiasWeight(delta, m_momentum);
+        }
+
+        for (int i = 0; i < m_output_layer.size(); ++i)
+        {
+            double delta = m_learn_rate * deltaO_k[i] * 1.0;
+             m_output_layer[i].addBiasWeight(delta, m_momentum);
+        }
+        
     }
 
-    double StandardFFNN::getSSE(int pattern)
+    //TODO: RENAME ME!!
+    double StandardFFNN::getSSE(int pattern, int set)
     {
         double acc = 0;
+        assert(set == 0 || set == 1);
         for (int k = 0; k < m_output_layer.size(); k++) {
-            acc += pow(m_training.getOutputs(pattern)[k] - m_output_layer[k].getOutput(), 2);
+            double output = (set == 0)? m_training.getOutputs(pattern)[k] : m_verification.getOutputs(pattern)[k];            
+            acc += pow(output - m_output_layer[k].getOutput(), 2);
         }
+        
 
         acc /= m_output_layer.size();
     }
@@ -125,19 +184,44 @@ namespace nnet
         return *this;
     }
    
-    StandardFFNN& StandardFFNN::trainFor(int iterations, bool verbose) {       
+    StandardFFNN& StandardFFNN::trainFor(int iterations) {       
         for (int i = 0; i < iterations; i++) {
+            m_learn_rate *= 0.998;
             m_training.shuffle();
             double sse_sum = 0;
+            double v_sse_sum = 0;
             for (int k = 0; k < m_training.size(); k++) {
                 updateWeightsStochastic(k);
                 sse_sum += getSSE(k);
             }
-            if (verbose) {
-                std::cout << "iteration " << i << ": " << std::endl;
-                std::cout << "MSE: " << sse_sum/m_training.size() << std::endl;
+
+            for (int k = 0; k < m_verification.size(); k++) {
+                getOutputs(k, 1); //verification set is 1
+                v_sse_sum += getSSE(k);
+            }
+            
+            if (m_verbose) {
+//                std::cout << "iteration " << i << ": " << std::endl;
+                std::cout << sse_sum/m_training.size() << "," << sse_sum/m_verification.size() << std::endl;
+                //              std::cout << "VMSE: " <<  << std::endl;
+                //               std::cout << "LR: " << m_learn_rate << std::endl;
             }     
         }
+
+        std::cout << "test data:" << std::endl;
+        if(m_verbose)
+        {
+            for (int k = 0; k < m_test.size(); k++) {
+                vector<double> outp =  getOutputs(k, 2);
+                int j = 0;
+                for (; j < outp.size() - 1; j++) {
+                      std::cout << outp[j] << ", " ;
+                }
+                std::cout << outp[j] << std::endl;
+            }
+
+        }
+        
         return *this;
     }
 
@@ -156,6 +240,12 @@ namespace nnet
     StandardFFNN& StandardFFNN::setTrainingSet(DataResultsSet train_set)
     {
         m_training = train_set;
+        return *this;
+    }
+
+    StandardFFNN& StandardFFNN::verbose(bool verbose)
+    {
+        m_verbose = verbose;
         return *this;
     }
 }

@@ -13,32 +13,48 @@ int main(int argc, char *argv[])
 
 
     //get data into useful format
-    string indep_t = "../Data/Training3/HourlyInputTraining.csv";
-    string dep_t = "../Data/Training1/HourlyOutputTraining.csv";
+    string indep_t = "../Data/Training5/HourlyInputTraining.csv";
+    string dep_t = "../Data/Training5/HourlyOutputTraining.csv";
     DataResultsSet training = DataResultsSet(indep_t , dep_t);
     DataResultsSet training2 = DataResultsSet(indep_t , dep_t);
     
-    string indep_v = "../Data/Validation1/HourlyInputValidation.csv";
-    string dep_v = "../Data/Validation1/HourlyOutputValidation.csv";
+    string indep_v = "../Data/Validation3/HourlyInputValidation.csv";
+    string dep_v = "../Data/Validation3/HourlyOutputValidation.csv";
     DataResultsSet validation = DataResultsSet(indep_v , dep_v);
+
+    string indep_test = "../Data/Test1/HourlyInputTest.csv";
+    DataSet test = DataSet(indep_test);
     
     Linear lin;
     Sigmoid sig;
     Cosine cos;
+    Sine sin;
+    
+    //half sin and half cos because why not
+    vector<Neuron> specialHidden;
+    for (int i = 0; i < 4; i++) {
+        specialHidden.push_back(Neuron(4, sin));        
+    }
+    for (int i = 4; i < 8; i++) {
+        specialHidden.push_back(Neuron(4, lin));        
+    }
     
     StandardFFNN network = StandardFFNN(
-        lin, 5,
-        cos, 3, //how many of these should I have? we shall experiment
-        lin, 1,
+        lin, 4,
+        sin, 15, //how many of these should I have? we shall experiment
+        lin, 24,
         training,
-        validation );
-
+        validation,
+        test);
+    
     //method chaining <3
     network
-        .setLearnRate(0.01)
-        .setMomentum(0.9)
-        .trainFor(5000, true)
-        .setTrainingSet(training2)
-        .printOutputs();    
+        .setLearnRate(0.005)
+        .setMomentum(0.7)
+        .verbose(true)
+        .trainFor(4000)
+        .setTrainingSet(training2) //unshuffled copy
+        //   .printOutputs()
+        ;   //this is so i can comment out the last line lol 
     return 0;
 }

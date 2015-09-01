@@ -7,11 +7,11 @@ namespace nnet {
     //size excludes bias
     Neuron::Neuron(int size, Func& function) :
         m_function(function),
-        m_size(size + 1),
+        m_size(size),
         m_valid(false),
         m_prev_delta_w(0) {
         
-        for(int i = 0; i < m_size; i++) {
+        for(int i = 0; i < size; i++) {
             m_weights.push_back({0});
             m_prev_delta_w.push_back(0);
             
@@ -65,12 +65,17 @@ namespace nnet {
     }
 
     void Neuron::addWeight(int i, double value, double momentum) {
-        assert(i >= 0 && i < m_size);
+        assert(i >= 0 && i <= m_size); //can add bias weight
         //momentum term built into neuron
         m_weights[i] = KahanSum(m_weights[i], value + momentum * m_prev_delta_w[i]);
         //save last weight update
         m_prev_delta_w[i] = value;
         m_valid = false;
+    }
+    
+    void Neuron::addBiasWeight(double value, double momentum)
+    {
+        addWeight(m_size, value, momentum);
     }
 
     void Neuron::printWeights() {

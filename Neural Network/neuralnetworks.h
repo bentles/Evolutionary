@@ -15,35 +15,44 @@ namespace nnet
     {
     private:        
         vector<Neuron> m_input_layer;
-        vector<Neuron> m_hidden_layer;
         vector<Neuron> m_output_layer;
+        vector<Neuron> m_hidden_layer; 
         DataResultsSet m_training;
         DataResultsSet m_verification;
+        DataSet m_test;
         double m_learn_rate;
         double m_momentum;
+        bool m_verbose;
 
         void updateWeightsStochastic(int pattern);
     public:
-        // the idea is to have this take in vectors of customly created layers
-        // though i guess some assumptions may have to be made about these vectors
-        // for training
-        // TODO:do all elems of a vector need the same activation fn??
         StandardFFNN(Func &input_func,
-                               int nr_inputs,
-                               Func &hidden_func,
-                               int nr_hiddens,
-                               Func &output_func,
-                               int nr_outputs,                               
-                               const DataResultsSet &training,
-                               const DataResultsSet &verification);
+                     int nr_inputs,
+                     Func &hidden_func,
+                     int nr_hiddens,
+                     Func &output_func,
+                     int nr_outputs,                               
+                     const DataResultsSet &training,
+                     const DataResultsSet &verification,
+                     const DataSet &test);
 
-        vector<double> getOutputs(int pattern);
-        double getSSE(int pattern);
+        StandardFFNN(Func &input_func,
+                     int nr_inputs,
+                     vector<Neuron> hidden,
+                     Func &output_func,
+                     int nr_outputs,                               
+                     const DataResultsSet &training,
+                     const DataResultsSet &verification,
+                     const DataSet &test);
+
+        vector<double> getOutputs(int pattern, int set = 0);
+        double getSSE(int pattern, int set = 0);
         StandardFFNN& setLearnRate(double rate);
         StandardFFNN& setMomentum(double momentum);
-        StandardFFNN& trainFor(int iterations, bool verbose = false);
+        StandardFFNN& trainFor(int iterations);
         StandardFFNN& printOutputs();
         StandardFFNN& setTrainingSet(DataResultsSet train_set);
+        StandardFFNN& verbose(bool verbose);
     };
 }
 
