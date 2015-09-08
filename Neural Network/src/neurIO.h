@@ -26,7 +26,7 @@ namespace nnet
         int size();
         int fieldSize();
         void print();
-    };
+    }; 
 
     class DataResultsSet : public DataSet {
     private:

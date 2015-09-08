@@ -1,6 +1,6 @@
 CFLAGS = -g -std=c++11
 
-all: neuron.cpp
+all: neuron.cpp functions.cpp neurIO.cpp helpers.cpp neuralnetworks.cpp
 	g++ $(CFLAGS) -c neuron.cpp functions.cpp neurIO.cpp helpers.cpp neuralnetworks.cpp
 	ar rvs libnnet.a neuron.o   functions.o   neurIO.o   helpers.o   neuralnetworks.o
 

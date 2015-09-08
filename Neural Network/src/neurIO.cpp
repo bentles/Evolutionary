@@ -37,7 +37,7 @@ namespace nnet {
     void DataResultsSet::shuffle()
     {
         std::random_device rd;
-        std::mt19937 mt(rd());
+        std::mt19937 mt(rd()); 
         std::uniform_real_distribution<double> dist(0,1);
         
         for (int i = m_patterns.size() - 1; i > 0; i--) {
